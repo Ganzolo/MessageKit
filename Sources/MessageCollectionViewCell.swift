@@ -65,6 +65,7 @@ open class MessageCollectionViewCell<ContentView: UIView>: UICollectionViewCell 
     override public init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
+		setupCopyPaste()
         setupGestureRecognizers()
         contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     }
@@ -84,6 +85,12 @@ open class MessageCollectionViewCell<ContentView: UIView>: UICollectionViewCell 
         contentView.addSubview(cellBottomLabel)
 
     }
+	
+	internal func setupCopyPaste() {
+		let copyMenuItem = UIMenuItem(title: "Copy", action: NSSelectorFromString("copyMessageContent"))
+		UIMenuController.shared.setTargetRect(messageContainerView.frame, in: self)
+		UIMenuController.shared.menuItems = [copyMenuItem]
+	}
 
     override open func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
@@ -151,6 +158,9 @@ open class MessageCollectionViewCell<ContentView: UIView>: UICollectionViewCell 
         messageContainerView.addGestureRecognizer(messageTapGesture)
         messageContainerView.isUserInteractionEnabled = true
         self.messageTapGesture = messageTapGesture
+		
+		let messageLongPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressMessage))
+		messageContainerView.addGestureRecognizer(messageLongPressGesture)
 
         let topLabelTapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapTopLabel))
         cellTopLabel.addGestureRecognizer(topLabelTapGesture)
@@ -161,6 +171,14 @@ open class MessageCollectionViewCell<ContentView: UIView>: UICollectionViewCell 
         cellBottomLabel.isUserInteractionEnabled = true
 
     }
+	
+	func didLongPressMessage() {
+		_ = messageContainerView.becomeFirstResponder()
+		let copyMenuItem = UIMenuItem(title: "Copy", action: NSSelectorFromString("copyMessageContent"))
+		UIMenuController.shared.setTargetRect(messageContainerView.frame, in: self)
+		UIMenuController.shared.menuItems = [copyMenuItem]
+		UIMenuController.shared.setMenuVisible(true, animated: true)
+	}
 
     // MARK: - Delegate Methods
 

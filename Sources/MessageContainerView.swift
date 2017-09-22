@@ -71,5 +71,31 @@ open class MessageContainerView: UIImageView {
             tintColor = nil
         }
     }
-
+	
+	open override var canBecomeFirstResponder: Bool {
+		get {
+			return true
+		}
+	}
+	
+	override open func becomeFirstResponder() -> Bool {
+		let isFirstResponder = super.becomeFirstResponder()
+		
+		if isFirstResponder {
+			self.backgroundColor = UIColor.blue
+		}
+		
+		return isFirstResponder
+	}
+	
+//	private var previousColor:UIColor?
+	open override func resignFirstResponder() -> Bool {
+		let didResignFirstResponder = super.resignFirstResponder()
+		
+		if didResignFirstResponder {
+			self.backgroundColor = self.tintColor
+		}
+		
+		return didResignFirstResponder
+	}
 }

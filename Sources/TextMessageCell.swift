@@ -39,6 +39,14 @@ open class TextMessageCell: MessageCollectionViewCell<MessageLabel> {
             messageTapGesture?.delegate = messageContentView
         }
     }
+	
+	func copyMessageContent() {
+		
+	}
+	
+	open override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+		return action == NSSelectorFromString("copyMessageContent")
+	}
 
     // MARK: - Methods
 
